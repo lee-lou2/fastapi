@@ -1,0 +1,110 @@
+version: "3.9"
+
+networks:
+  jay-net:
+    name: jay-net
+    ipam:
+      config:
+        - subnet: 172.20.1.0/24
+
+services:
+  jenkins:
+    image: jenkins/jenkins
+    container_name: jenkins
+    hostname: jenkins
+    expose:
+      - 8080
+    volumes:
+      - jenkins:/var/jenkins_home
+    env_file: env/prod/.env.jenkins
+    networks:
+      jay-net:
+        ipv4_address: 172.20.1.2
+
+  api:
+    build:
+      context: .
+      dockerfile: dockerfiles/Dockerfile.api
+    container_name: api
+    hostname: api
+    restart: always
+    expose:
+      - 80
+    volumes:
+      - ..:/app
+    working_dir: /app/
+    env_file: env/prod/.env.api
+    networks:
+      jay-net:
+        ipv4_address: 172.20.1.3
+
+  worker:
+    build:
+      context: .
+      dockerfile: dockerfiles/Dockerfile.worker
+    container_name: worker
+    hostname: worker
+    restart: always
+    volumes:
+      - ..:/app
+    depends_on:
+      - api
+    working_dir: /app/
+    env_file: env/prod/.env.worker
+    networks:
+      jay-net:
+        ipv4_address: 172.20.1.4
+
+  flower:
+    build:
+      context: .
+      dockerfile: dockerfiles/Dockerfile.flower
+    container_name: flower
+    hostname: flower
+    restart: always
+    expose:
+      - 80
+    volumes:
+      - ..:/app
+    depends_on:
+      - worker
+    working_dir: /app/
+    env_file: env/prod/.env.flower
+    networks:
+      jay-net:
+        ipv4_address: 172.20.1.5
+
+  proxy:
+    image: jwilder/nginx-proxy
+    container_name: proxy
+    hostname: proxy
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - /etc/nginx/certs
+      - /etc/nginx/vhost.d
+      - /usr/share/nginx/html
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+    networks:
+      jay-net:
+        ipv4_address: 172.20.1.6
+
+#  es:
+#    image: elasticsearch:7.12.1
+#    container_name: es
+#    hostname: es
+#    restart: always
+#    env_file: env/prod/.env.es
+#    expose:
+#      - 9200
+#      - 9300
+#    volumes:
+#      - es:/usr/share/elasticsearch/data
+#    networks:
+#      jay-net:
+#        ipv4_address: 172.20.1.7
+
+volumes:
+  jenkins:
+#  es:

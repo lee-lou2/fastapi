@@ -1,0 +1,35 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:10
+    container_name: db
+    hostname: db
+    restart: unless-stopped
+    volumes:
+      - db:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    env_file: env/prod/.env.db
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "jay" ]
+
+  cache:
+    image: redis:5.0.3-alpine
+    container_name: cache
+    hostname: cache
+    command: redis-server
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - cache:/data
+    healthcheck:
+      test: "redis-cli -h 127.0.0.1 ping"
+      interval: 3s
+      timeout: 1s
+      retries: 5
+
+volumes:
+  db:
+  cache:
