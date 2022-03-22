@@ -318,9 +318,17 @@ class CreateProductRequestBase(BaseModel):
         return cafe24_api.retrieve_product(product_no=product_no)
 
     def save(self):
+        from conf.databases import mongo
+
+        # 데이터 조회
         product = self.product_detail.get('product')
         if product is None:
             raise
+
+        # MongoDB 에 raw 데이터 저장
+        collection = mongo.cafe24
+        collection.insert_one(dict(product))
+        # 데이터 가공하여 기본 DB 에 저장
         product_base = CreateProductBase(**product)
         product_base.save()
         return True
