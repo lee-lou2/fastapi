@@ -140,6 +140,13 @@ class ExternalService:
     SEND_STOCK_QTY = environ.get('SEND_STOCK_QTY')
 
 
+class FTPAccount:
+    FTP_CONNECT_URL = environ.get('FTP_CONNECT_URL')
+    FTP_CONNECT_ID = environ.get('FTP_CONNECT_ID')
+    FTP_CONNECT_PASSWORD = environ.get('FTP_CONNECT_PASSWORD')
+    FTP_CONNECT_UPLOAD_PATH = environ.get('FTP_CONNECT_UPLOAD_PATH')
+
+
 class Settings(BaseSettings,
                BaseConfig,
                Token,
@@ -149,7 +156,8 @@ class Settings(BaseSettings,
                Notice,
                SocialLogin,
                Encrypt,
-               ExternalService):
+               ExternalService,
+               FTPAccount):
 
     class Config:
         case_sensitive = True

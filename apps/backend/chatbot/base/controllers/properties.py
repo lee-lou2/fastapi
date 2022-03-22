@@ -73,6 +73,23 @@ class KaKaoProperty:
         picture = json.loads(picture) if picture else {}
         return {'pictures': picture.get('secureUrls')}
 
+    def create_image(self, content):
+        # 이미지 파일 조회
+        image_file_param = self.depth_of_dict.get_value('action', 'params', 'image_file')
+        image_file_param = json.loads(image_file_param).get('secureUrls') if image_file_param else None
+        image_file_param = str(image_file_param)[5:-1] if image_file_param else None
+        image_file_params = image_file_param.split(',')
+
+        # 이미지 링크 조회
+        image_url_param = self.depth_of_dict.get_value('action', 'params', 'image_url')
+
+        image_urls = [image_url_param] + image_file_params
+
+        from conf.celery import upload_images_task
+        upload_images_task.delay(image_urls=image_urls)
+
+        self.is_created = True
+
     def create_alarm(self, content):
         """
         알림 생성
@@ -153,6 +170,8 @@ class KaKaoProperty:
         from core.choices import ChatBotContentTypeChoices
         if self.block_type == ChatBotContentTypeChoices.A.name:
             self.create_alarm(chat_bot_content)
+        elif self.block_type == ChatBotContentTypeChoices.IMG.name:
+            self.create_image(chat_bot_content)
 
         # 엘라스틱 서치에 추가
         from conf.databases import es
