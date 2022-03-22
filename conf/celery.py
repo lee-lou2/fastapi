@@ -37,3 +37,42 @@ def send_email_task(message: str):
         message=message,
         users=[SendEmailIn(email=settings.RECEIVE_EMAIL_ADDRESS)]
     ))
+
+
+@app.task
+def upload_images_task(image_urls: list):
+    import os
+    import ftplib
+    import datetime
+    import requests
+    from conf.settings.prod import settings
+
+    count = 0
+
+    for image_url in image_urls:
+        image_url = str(image_url).strip() if image_url else None
+        if image_url is None or not (image_url[:4] == 'http'):
+            continue
+
+        res = requests.get(image_url, allow_redirects=True)
+
+        now = datetime.datetime.now()
+        str_now = datetime.datetime.strftime(now, '%Y%m%d%H%M%S')
+        file_path = f'image_{str_now}_{count}.jpg'
+        count += 1
+
+        open(file_path, 'wb').write(res.content)
+
+        session = ftplib.FTP()
+        session.connect(settings.FTP_CONNECT_URL, 21)
+        session.login(settings.FTP_CONNECT_ID, settings.FTP_CONNECT_PASSWORD)
+
+        upload_file = open(file_path, mode='rb')
+
+        session.encoding = 'utf-8'
+        session.storbinary('STOR ' + f'{settings.FTP_CONNECT_UPLOAD_PATH}{file_path}', upload_file)
+
+        upload_file.close()
+
+        session.quit()
+        os.remove(file_path)

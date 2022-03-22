@@ -30,3 +30,4 @@ class ChatBotContentTypeChoices(enum.Enum):
     DT = 'DateTime'
     A = 'Alarm'
     DA = 'Delete Alarm'
+    IMG = 'Create Image'
