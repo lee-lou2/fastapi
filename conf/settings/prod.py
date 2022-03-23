@@ -36,6 +36,7 @@ class BaseConfig:
     SECRET_KEY: str = environ.get('SECRET_KEY')
     # Static Path
     BASE_PATH: str = environ.get('BASE_PATH', '.')
+    DEFAULT_DOMAIN: str = environ.get('DEFAULT_DOMAIN', 'api.ja-y.com')
 
 
 class Token:

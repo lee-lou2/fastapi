@@ -102,3 +102,11 @@ class CategoryExceptions:
         detail='객체를 찾지 못했습니다',
         headers={'code': '120001'}
     )
+
+
+class FrontendExceptions:
+    ExpiredFriend = HTTPException(
+        status_code=status.HTTP_409_CONFLICT,
+        detail='만료된 사용자 정보입니다',
+        headers={'code': '130001'}
+    )
