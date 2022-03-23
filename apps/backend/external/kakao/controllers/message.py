@@ -27,8 +27,6 @@ def send_to_you_message(access_token: str, template: dict):
     return requests.post(url, headers=header, data=data)
 
 
-
-
 class MessageTemplate:
     @classmethod
     def default_text(cls, message):
