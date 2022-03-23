@@ -90,21 +90,21 @@ services:
       jay-net:
         ipv4_address: 172.20.1.6
 
-#  es:
-#    image: elasticsearch:7.12.1
-#    container_name: es
-#    hostname: es
-#    restart: always
-#    env_file: env/prod/.env.es
-#    expose:
-#      - 9200
-#      - 9300
-#    volumes:
-#      - es:/usr/share/elasticsearch/data
-#    networks:
-#      jay-net:
-#        ipv4_address: 172.20.1.7
+  es:
+    image: elasticsearch:7.12.1
+    container_name: es
+    hostname: es
+    restart: always
+    env_file: env/prod/.env.es
+    expose:
+      - 9200
+      - 9300
+    volumes:
+      - es:/usr/share/elasticsearch/data
+    networks:
+      jay-net:
+        ipv4_address: 172.20.1.7
 
 volumes:
   jenkins:
-#  es:
+  es:
