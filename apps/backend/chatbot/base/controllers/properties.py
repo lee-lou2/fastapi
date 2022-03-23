@@ -166,14 +166,30 @@ class KaKaoProperty:
         self.db.add(chat_bot_content)
         self.db.commit()
 
-        # 알람 서비스
+        # --------------------------
+        # Content Type 에 대한 추가 처리
+        # --------------------------
+        # Type : 이미지
+        media_content_type = self.depth_of_dict.get_value('userRequest', 'params', 'media', 'type')
+        if media_content_type and media_content_type == 'image':
+            from conf.celery import upload_images_task
+            upload_images_task.delay(image_urls=[content])
+
+        # ------------------------
+        # Block Type 에 대한 추가 처리
+        # ------------------------
+        # Type : 알람
         from core.choices import ChatBotContentTypeChoices
         if self.block_type == ChatBotContentTypeChoices.A.name:
             self.create_alarm(chat_bot_content)
+        # Type : 이미지
         elif self.block_type == ChatBotContentTypeChoices.IMG.name:
             self.create_image(chat_bot_content)
 
-        # 엘라스틱 서치에 추가
+        # ----------
+        # 기타 추가 처리
+        # ----------
+        # 엘라스틱 서치
         from conf.databases import es
         es_index = 'chat_bot'
         if not es.indices.exists(index=es_index):
