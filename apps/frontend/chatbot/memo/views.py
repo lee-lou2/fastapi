@@ -20,8 +20,11 @@ async def memo(
             'from': 0,
             'size': 100,
             'query': {
-                'match': {
-                    'message': q
+                'dis_max': {
+                    'queries': [
+                        {'match': {'message': q}},
+                        {'match': {'friend_key': friend_key}}
+                    ]
                 }
             }
         }).get('hits', {}).get('hits')
