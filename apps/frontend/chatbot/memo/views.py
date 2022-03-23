@@ -1,6 +1,5 @@
-from fastapi import APIRouter, Depends, Request
-from sqlalchemy.orm import Session
-from conf.databases import get_db
+from fastapi import APIRouter, Request
+from conf.databases import es
 from core.templates import template
 
 router_v1 = APIRouter()
@@ -11,16 +10,22 @@ async def memo(
         *,
         request: Request,
         friend_key: str = None,
-        db: Session = Depends(get_db)
+        q: str = None,
 ):
     from conf.caches import memo_cache
-    from apps.backend.chatbot.base.models import ChatBot, ChatBotContent
 
     # 캐시에 저장되어있는지 확인
     if memo_cache.exists(friend_key):
-        chat_bot = db.query(ChatBot).filter_by(friend_key=friend_key).first()
-        contents = db.query(ChatBotContent).filter_by(chat_bot=chat_bot)
-        memo_list = [(content.content, content.id) for content in contents]
+        objs = es.search(index='chat_bot', body={
+            'from': 0,
+            'size': 100,
+            'query': {
+                'match': {
+                    'message': q
+                }
+            }
+        }).get('hits', {}).get('hits')
+        memo_list = [(obj.get('_source', {}).get('message'), obj.get('_source', {}).get('id')) for obj in objs]
     else:
         from core import exceptions as ex
         raise ex.FrontendExceptions.ExpiredFriend
