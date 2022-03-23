@@ -195,6 +195,7 @@ class KaKaoProperty:
         if not es.indices.exists(index=es_index):
             es.indices.create(index=es_index)
         doc = {
+            'friend_key': friend_key,
             'message': content,
             'id': chat_bot_content.id
         }
