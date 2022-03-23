@@ -197,7 +197,7 @@ class KaKaoProperty:
         doc = {
             'message': content
         }
-        es.index(index=es_index, document=doc)
+        es.index(index=es_index, doc_type='_doc', body=doc)
         es.indices.refresh(index=es_index)
 
         # 반환 값 설정
