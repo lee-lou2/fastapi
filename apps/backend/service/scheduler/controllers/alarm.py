@@ -4,11 +4,13 @@ import pytz
 
 
 def notification(message):
-    from conf.celery import send_slack_task, send_email_task
+    from conf.celery import send_slack_task, send_email_task, send_ka_ka_o_task
 
     message = datetime.now().strftime('[%m/%d %H:%M:%S] ') + message
     # 슬랙 전송
     send_slack_task.delay(message)
+    # 카카오 전송
+    send_ka_ka_o_task.delay(message)
     # # 이메일 발송
     # send_email_task.delay(message)
 
