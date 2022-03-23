@@ -12,6 +12,7 @@ from starlette.middleware.sessions import SessionMiddleware
 from starlette.testclient import TestClient
 
 from apps.backend.graphql.logger.views import graphql_app
+from conf.router.frontend import frontend_router
 from conf.settings.prod import settings
 from conf.databases import DefaultBase, default_engine, log_engine, LogBase
 from core.middlewares.database import db_session_middleware
@@ -118,6 +119,10 @@ app.mount("/static", StaticFiles(directory=f"{settings.BASE_PATH}/static"), name
 app.include_router(
     api_v1_router,
     prefix=settings.API_V1_STR
+)
+app.include_router(
+    frontend_router,
+    prefix='/frontend'
 )
 app.add_route("/graphql", graphql_app)
 app.add_websocket_route("/graphql", graphql_app)
