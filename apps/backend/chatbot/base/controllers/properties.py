@@ -195,7 +195,8 @@ class KaKaoProperty:
         if not es.indices.exists(index=es_index):
             es.indices.create(index=es_index)
         doc = {
-            'message': content
+            'message': content,
+            'id': chat_bot_content.id
         }
         es.index(index=es_index, doc_type='_doc', body=doc)
         es.indices.refresh(index=es_index)

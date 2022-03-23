@@ -42,7 +42,8 @@ async def memo_list(
     body = await request.body()
     prop = KaKaoProperty(body, db)
     friend_key = prop.friend.get('user_key')
-    url = f'http://{settings.DEFAULT_DOMAIN}/frontend/chat_bot/memo/?friend_key={friend_key}'
+    search_text = prop.depth_of_dict.get_value('action', 'params', 'search_text')
+    url = f'http://{settings.DEFAULT_DOMAIN}/frontend/chat_bot/memo/?friend_key={friend_key}&q={search_text}'
 
     # 3분 후 삭제되도록 캐시 설정
     memo_cache.set(friend_key, '', 180)
