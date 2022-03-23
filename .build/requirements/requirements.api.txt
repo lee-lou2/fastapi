@@ -21,8 +21,7 @@ cryptography==36.0.1
 cssselect==1.1.0
 cssutils==2.3.0
 dnspython==2.1.0
-elastic-transport==8.1.0
-elasticsearch==8.1.0
+elasticsearch==7.12.1
 fastapi==0.70.1
 greenlet==1.1.2
 h11==0.12.0
