@@ -28,6 +28,19 @@ def send_slack_task(message: str):
 
 
 @app.task
+def send_ka_ka_o_task(message: str):
+    from conf.caches import ka_ka_o_cache
+    from apps.backend.external.kakao.controllers.message import MessageTemplate, send_to_you_message
+
+    access_token = ka_ka_o_cache.get('access_token')
+    template = MessageTemplate.default_text(message)
+    send_to_you_message(
+        access_token,
+        template
+    )
+
+
+@app.task
 def send_email_task(message: str):
     # 이메일 발송
     from conf.settings.prod import settings
