@@ -6,4 +6,5 @@ class ScheduleName(str, Enum):
     KAKAO_REFRESH_TOKEN: str = 'kakao_refresh_token'
     SEND_STOCK: str = 'send_stock'
     ALARM_SERVICE: str = 'alarm_service'
+    CRAWLING: str = 'crawling'
     ETC: str = 'etc'

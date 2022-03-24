@@ -141,6 +141,11 @@ class ExternalService:
     SEND_STOCK_BUY_PRICE = environ.get('SEND_STOCK_BUY_PRICE')
     SEND_STOCK_QTY = environ.get('SEND_STOCK_QTY')
 
+    # 네이버
+    NAVER_CLIENT_ID = environ.get('NAVER_CLIENT_ID')
+    NAVER_CLIENT_SECRET = environ.get('NAVER_CLIENT_SECRET')
+    NAVER_DEFAULT_SEARCH_TEXT = environ.get('NAVER_DEFAULT_SEARCH_TEXT')
+
 
 class FTPAccount:
     FTP_CONNECT_URL = environ.get('FTP_CONNECT_URL')

@@ -19,10 +19,10 @@ def health():
 
 
 @app.task
-def send_slack_task(message: str):
+def send_slack_task(message: str, room: str = 'alarm'):
     from apps.backend.service.notice.controllers.send import send_slack_background_task
     send_slack_background_task(SendSlackRequest(
-        room='alarm',
+        room=room,
         message=message
     ))
 
