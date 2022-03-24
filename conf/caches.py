@@ -32,6 +32,12 @@ memo_cache = redis.StrictRedis(
     db=4,
     decode_responses=True
 )
+crawling_cache = redis.StrictRedis(
+    host=CACHE_URL,
+    port=CACHE_PORT,
+    db=5,
+    decode_responses=True
+)
 
 # 리미터 URL
 limiter_cache_url = f"redis://{CACHE_URL}:{CACHE_PORT}/0"
