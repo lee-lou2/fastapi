@@ -58,6 +58,14 @@ async def add_schedule(
             seconds=time_in_seconds,
             id='alarm_service'
         )
+    elif schedule_name == ScheduleName.CRAWLING:
+        from apps.backend.service.scheduler.controllers.crawling import crawling_data
+        schedule_job = Schedule.add_job(
+            crawling_data,
+            'interval',
+            seconds=time_in_seconds,
+            id='crawling'
+        )
     return {
         "Scheduled": True,
         "JobID": schedule_job.id,
@@ -91,4 +99,10 @@ async def remove_schedule(
         return {
             "Scheduled": False,
             "JobID": 'alarm_service'
+        }
+    elif schedule_name == ScheduleName.CRAWLING:
+        Schedule.remove_job('crawling')
+        return {
+            "Scheduled": False,
+            "JobID": 'crawling'
         }
