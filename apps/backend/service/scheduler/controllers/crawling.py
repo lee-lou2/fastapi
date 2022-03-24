@@ -1,8 +1,22 @@
+def notification(message: str):
+    from conf.celery import send_slack_task
+    send_slack_task.delay(message)
+
+    from conf.caches import ka_ka_o_cache
+    from apps.backend.external.kakao.controllers.message import MessageTemplate, send_to_you_message
+
+    access_token = ka_ka_o_cache.get('access_token')
+    template = MessageTemplate.default_text(message)
+    send_to_you_message(
+        access_token,
+        template
+    )
+
+
 def crawling_data():
     import re
     import json
     import urllib.request
-    from conf.celery import send_slack_task
     from conf.settings.prod import settings
     from conf.caches import crawling_cache
 
@@ -33,9 +47,10 @@ def crawling_data():
                 items.append({'description': description})
             crawling_cache.set(response_dict.get('items')[0].get('link'), '')
         else:
-            send_slack_task.delay("Error Code:" + res_code)
+            notification("Error Code:" + res_code)
             break
     else:
         from conf.databases import mongo
         collection = mongo.information
         collection.insert_many(items)
+        # notification(f'[{settings.NAVER_DEFAULT_SEARCH_TEXT}] {len(items)}개 추가 완료')
