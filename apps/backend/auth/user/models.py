@@ -38,6 +38,7 @@ class User(DefaultBase, TimeStamp):
     user_secret = relationship('UserSecret', back_populates='user', uselist=False)
     user_social = relationship(UserSocial, back_populates='user')
     user_local = relationship(UserLocal, back_populates='user', uselist=False)
+    security_rsa_key_set = relationship('SecurityRSAKeySet', back_populates='user', uselist=False)
 
     @classmethod
     def merge_or_create_user(cls, db, data: dict):
