@@ -12,6 +12,7 @@ from apps.backend.chatbot.question import views as question
 from apps.backend.external.cafe24 import views as cafe24_product
 from apps.backend.external.kakao import views as ka_ka_o_product
 from apps.backend.websocket.chat import views as chat_web_socket
+from apps.backend.security.rsa import views as security_rsa
 
 
 api_v1_router = APIRouter()
@@ -28,3 +29,4 @@ api_v1_router.include_router(question.router_v1, prefix="/chat_bot/question", ta
 api_v1_router.include_router(cafe24_product.router_v1, prefix="/external/cafe24", tags=["cafe24"])
 api_v1_router.include_router(ka_ka_o_product.router_v1, prefix="/external/ka_ka_o", tags=["ka_ka_o"])
 api_v1_router.include_router(chat_web_socket.router_v1, prefix="/web_socket/chat", tags=["chat_web_socket"])
+api_v1_router.include_router(security_rsa.router_v1, prefix="/security/rsa", tags=["security_rsa"])
