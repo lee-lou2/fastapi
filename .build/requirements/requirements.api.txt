@@ -80,3 +80,5 @@ websockets==10.1
 yagmail==0.14.260
 strawberry-graphql
 psycopg2
+elementpath
+hangul-utils

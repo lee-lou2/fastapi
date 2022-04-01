@@ -2,6 +2,7 @@ from fastapi import APIRouter
 
 from apps.backend.service.scheduler.schemas import ScheduleName
 from conf.scheduler import Schedule
+from .models import *
 
 
 # 라우터
@@ -66,6 +67,14 @@ async def add_schedule(
             seconds=time_in_seconds,
             id='crawling'
         )
+    elif schedule_name == ScheduleName.APARTMENT_SALES_API:
+        from apps.backend.service.scheduler.controllers.apartment import schedule_apartment_service
+        schedule_job = Schedule.add_job(
+            schedule_apartment_service,
+            'interval',
+            seconds=time_in_seconds,
+            id='apartment_sales_api'
+        )
     return {
         "Scheduled": True,
         "JobID": schedule_job.id,
@@ -105,4 +114,10 @@ async def remove_schedule(
         return {
             "Scheduled": False,
             "JobID": 'crawling'
+        }
+    elif schedule_name == ScheduleName.APARTMENT_SALES_API:
+        Schedule.remove_job('apartment_sales_api')
+        return {
+            "Scheduled": False,
+            "JobID": 'apartment_sales_api'
         }
