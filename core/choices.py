@@ -31,3 +31,7 @@ class ChatBotContentTypeChoices(enum.Enum):
     A = 'Alarm'
     DA = 'Delete Alarm'
     IMG = 'Create Image'
+
+
+class ApartmentSalesFormatChoices(enum.Enum):
+    K = 'KAKAO'

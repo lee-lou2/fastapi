@@ -7,4 +7,5 @@ class ScheduleName(str, Enum):
     SEND_STOCK: str = 'send_stock'
     ALARM_SERVICE: str = 'alarm_service'
     CRAWLING: str = 'crawling'
+    APARTMENT_SALES_API: str = 'apartment_sales_api'
     ETC: str = 'etc'
