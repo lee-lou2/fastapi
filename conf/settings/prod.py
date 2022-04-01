@@ -146,6 +146,11 @@ class ExternalService:
     NAVER_CLIENT_SECRET = environ.get('NAVER_CLIENT_SECRET')
     NAVER_DEFAULT_SEARCH_TEXT = environ.get('NAVER_DEFAULT_SEARCH_TEXT')
 
+    # 외부 데이터
+    DATA_API_SERVICE_KEY = environ.get('DATA_API_SERVICE_KEY')
+    DATA_API_SERVICE_URL = environ.get('DATA_API_SERVICE_URL')
+    DATA_API_DEFAULT_GU_CODE = environ.get('DATA_API_DEFAULT_GU_CODE')
+
 
 class FTPAccount:
     FTP_CONNECT_URL = environ.get('FTP_CONNECT_URL')
