@@ -83,7 +83,7 @@
 Git Clone :
 
 ```sh
-git clone https://github.com/iamjmon/fastapi.git
+git clone https://github.com/ja-y-com/fastapi.git
 ```
 
 환경 변수 생성 : `.env`, `.build 내 환경 설정 파일`
